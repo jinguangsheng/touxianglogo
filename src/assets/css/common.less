@@ -1,0 +1,106 @@
+html,
+body {
+    height: 100%;
+}
+
+a,
+a:visited {
+    color: #666;
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+}
+
+li {
+    list-style: none;
+}
+
+input[disabled],
+textarea[disabled] {
+    background: #d2d0d0;
+}
+
+.clearfix {
+
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+.juzhong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex1 {
+    display: flex;
+}
+
+.f-left {
+    float: left;
+}
+
+.f-right {
+    float: right;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.el-button--mini {
+    padding: 4px 15px !important;
+}
+
+.el-input__inner {
+    padding: 0 5px 0 5px !important;
+}
+
+.el-select {
+    width: 75px;
+}
+
+.el-input__suffix {
+    right: 0 !important;
+}
+
+.el-input-number__increase,
+.el-input-number__decrease {
+    width: 20px !important;
+}
+
+.el-input-number--mini {
+    width: 80px !important;
+}
+
+.el-popover {
+    min-width: 0px !important;
+}
+.el-color-picker__trigger{
+    padding: 0 !important;
+}
+.el-dropdown-menu{
+    z-index: 3000 !important;
+}
+// vant样式重置
+.van-tabs__line{
+    background: #409EFF !important;
+}
