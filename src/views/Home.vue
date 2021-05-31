@@ -554,7 +554,7 @@
                     v-for="(item, index) in sortList"
                     :key="index + item.name"
                   >
-                    <span>{{ item.name }}</span>
+                    <span>{{ item.text || item.name }}</span>
                     <!-- <div class="tuceng-item-wrap"></div> -->
                   </div>
                   <!-- </transition-group> -->
@@ -942,6 +942,7 @@ export default {
     selectImg (n) {
       this.huabuObj = deepCopy(n.huabuObj)
       this.elemList = deepCopy(n.elemList)
+      this.addToArea()
     },
     menuHandle (i, e) {
       this.activeMenu = i
@@ -1053,7 +1054,7 @@ export default {
       console.log(type, n)
       if (type === '图片') {
         const maxIndex = this.elemList.length
-        const el = { id: Date.now(), name: '图片', isActive: true, type: '图片', parentLimitation: false, w: 30, h: 30, x: 185, y: 185, zIndex: maxIndex, rotate: 0, src: n }
+        const el = { id: Date.now(), name: '图片', isActive: true, type: '图片', parentLimitation: false, w: 150, h: 150, x: 185, y: 185, zIndex: maxIndex, rotate: 0, src: n }
         this.activeElem = el
         this.positionHandle('左右居中')
         this.positionHandle('上下居中')
@@ -1261,8 +1262,12 @@ export default {
       } else if (type === '图片') {
         el = { id: Date.now(), name: '图片', isActive: true, type: '图片', parentLimitation: false, w: 50, h: 50, x: 175, y: 175, zIndex: maxIndex, rotate: 0, src: '' }
       }
-      this.activeElem = el
-      this.elemList.push(el)
+      if (el) {
+        this.activeElem = el
+        this.positionHandle('左右居中')
+        this.positionHandle('上下居中')
+        this.elemList.push(el)
+      }
       // this.sortList = deepCopy(this.elemList)
       this.sortList = this.elemList
       this.sortList.sort(this.compare).reverse()
@@ -1452,6 +1457,7 @@ export default {
   img{
     cursor: pointer;
     width: 114px;
+    height: 114px;
     object-fit: contain;
     margin-bottom: 5px;
   }
@@ -1775,7 +1781,8 @@ export default {
 .inner-area {
   display: flex;
   align-items: center;
-  justify-content: center;
+  text-align: left;
+  // justify-content: center;
 }
 .dian {
   width: 10px;
