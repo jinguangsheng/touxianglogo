@@ -1,4 +1,5 @@
 const path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 // svg路径
 function resolve(dir) {
   return path.join(__dirname, '.', dir)
@@ -17,7 +18,27 @@ module.exports = {
   //       }
   //   }
   // },
+  productionSourceMap: false,
   configureWebpack: {
+    optimization: {
+      minimizer: [
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            // 删除注释
+            output:{
+              comments:false
+            },
+            // 删除console debugger 删除警告
+            compress: {
+              warnings: false,
+              drop_console: true,//console
+              drop_debugger: false,
+              pure_funcs: ['console.log']//移除console
+            }
+          }
+      })
+    ]
+    },
     module: {
       // 除了src/assets/svg其他都编译
       // 不加这个的话下面svg-sprite-loader的时候会把他们一起编译

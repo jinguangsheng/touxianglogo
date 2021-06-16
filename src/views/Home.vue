@@ -602,7 +602,7 @@
             <div class="edit-area-header clearfix">
               <span class="f-left">原点{{huabuObj.w}}X{{huabuObj.h}}</span>
               <div class="f-right">
-                当前选中元素：<span class="dangqian">{{ activeElem.name || '无' }}</span>
+                当前选中元素：<span class="dangqian">{{ activeElem.text || activeElem.name || '无' }}</span>
                 <el-tooltip effect="dark" content="删除" placement="right">
                   <!-- <i @click="deleteElem" class="el-icon-delete"></i> -->
                   <icon class="delete" @click="deleteElem" href="delete" />
@@ -1711,6 +1711,10 @@ export default {
   color: #fff;
   margin-right: 5px;
   padding: 0 3px;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
 }
 .huabu-wrap{
   width: 100%;
