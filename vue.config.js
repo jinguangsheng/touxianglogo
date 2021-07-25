@@ -1,23 +1,25 @@
 const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 // svg路径
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, '.', dir)
 }
 module.exports = {
-  // css: {
-  //   loaderOptions: {
-  //       css: {
-  //           // options here will be passed to css-loader
-  //       },
-  //       postcss: {
-  //           // options here will be passed to postcss-loader
-  //           plugins: [require('postcss-px2rem')({
-  //               remUnit: 75
-  //           })]
-  //       }
-  //   }
-  // },
+  devServer: {
+    // host: 'localhost',
+    // port: '8080', // 设置端口号
+    hot: true,
+    proxy: {
+      '/2.0': {
+        target: 'https://aip.baidubce.com', // 访问地址
+        changeOrigin: true,
+        secure: false, // 只有代理https 地址需要次选项
+        pathRewrite: {
+          '^/2.0': '/2.0'
+        }
+      }
+    }
+  },
   productionSourceMap: false,
   configureWebpack: {
     optimization: {
@@ -25,19 +27,19 @@ module.exports = {
         new UglifyJsPlugin({
           uglifyOptions: {
             // 删除注释
-            output:{
-              comments:false
+            output: {
+              comments: false
             },
             // 删除console debugger 删除警告
             compress: {
               warnings: false,
-              drop_console: true,//console
+              drop_console: true, // console
               drop_debugger: false,
-              pure_funcs: ['console.log']//移除console
+              pure_funcs: ['console.log'] // 移除console
             }
           }
-      })
-    ]
+        })
+      ]
     },
     module: {
       // 除了src/assets/svg其他都编译
@@ -63,7 +65,7 @@ module.exports = {
       // 'element-ui': 'ELEMENT'
       // 'Vant': 'Vant'
     },
-    //警告 webpack 的性能提示
+    // 警告 webpack 的性能提示
     // performance: {
     //   hints:'warning',  // 枚举
     //   //入口起点的最大体积,整数类型（以字节为单位）

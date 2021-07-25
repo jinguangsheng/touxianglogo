@@ -99,6 +99,7 @@
                     <el-dropdown-item @click.native="setBgImg('图片', n)">添加到图区</el-dropdown-item>
                     <el-dropdown-item @click.native="setBgImg('选中背景', n)">设为当前选中背景图</el-dropdown-item>
                     <el-dropdown-item @click.native="setBgImg('底图背景', n)">设为全局背景图</el-dropdown-item>
+                    <el-dropdown-item @click.native="split(n)">人像分割</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </div>
@@ -668,6 +669,8 @@
                   v-if="item.type == '直线'"
                 ></div>
                 <div
+                  @dblclick="dblclick"
+                  @blur="dbblur"
                   class="inner-area"
                   v-if="item.type == '输入文字'"
                   :style="{
@@ -745,15 +748,19 @@
                 >宽:{{ activeElem.w }},高:{{ activeElem.h }}</span
               >
             </div>
-            <el-button
-              class="createImg"
+          </div>
+          <div class="btn-wrap">
+              <el-button
               type="primary"
               size="mini"
-              plain
               @click="createImg"
-              >免费下载图片</el-button
-            >
-          </div>
+              >免费下载图片</el-button>
+              <el-button
+              type="primary"
+              size="mini"
+              @click="split"
+              >人像分割</el-button>
+            </div>
         </div>
       </div>
     </div>
@@ -866,6 +873,7 @@ export default {
       ],
       fileList: [],
       activeElem: {},
+      // contenteditable: true,
       huabuObj: {
         name: '画布', type: '画布', w: 400, h: 400, borderColor: '#000', borderSize: 0, backgroundColor: '', backgroundImage: '', shadow1: 0, shadow2: 0, shadow3: 0, shadowColor: '#000', shadowDirection: '', borderRadius: 0
       },
@@ -939,6 +947,17 @@ export default {
     }
   },
   methods: {
+    dblclick () {
+      // this.contenteditable = true
+      // const innerDom = document.getElementsByClassName('inner-area')[0]
+      // innerDom.setAttribute('contenteditable', 'true')
+      console.log('db')
+    },
+    dbblur () {
+      // this.contenteditable = false
+      // const innerDom = document.getElementsByClassName('inner-area')[0]
+      // innerDom.setAttribute('contenteditable', 'false')
+    },
     selectImg (n) {
       this.huabuObj = deepCopy(n.huabuObj)
       this.elemList = deepCopy(n.elemList)
@@ -1220,6 +1239,17 @@ export default {
         })
       })
     },
+    split (n) {
+      const token = localStorage.getItem('baidu_token')
+      const url = '/rest/2.0/image-classify/v1/body_seg?access_token=' + token
+      // url += '&image=' + n
+      const form = new FormData()
+      form.append('image', n)
+      this.$api.post(url, form).then(res => {
+        console.log(res, 'res')
+        this.fileList.push('data:image/jpeg;base64,' + res.data.foreground)
+      })
+    },
     copy () {
       if (!this.activeElem.id || JSON.stringify(this.activeElem) === '{}') return
       console.log(this.activeElem)
@@ -1290,13 +1320,13 @@ export default {
     onActivated (e, item, i) {
     },
     mouthDown (e, item, i) {
-      console.log('mouthDown', item.name, this.elemList)
-      this.elemList.forEach(el => {
-        el.isActive = false
-      })
-      item.isActive = true
-      console.log('onActivated')
-      this.activeElem = item
+      // console.log('mouthDown', item.name, this.elemList)
+      // this.elemList.forEach(el => {
+      //   el.isActive = false
+      // })
+      // item.isActive = true
+      // console.log('onActivated')
+      // this.activeElem = item
       //  if (item.area === 'tool-area' && e.left >= 0 && e.left <= 400 && e.top >= 0 && e.top <= 400) {
       //    item.parentLimitation = true
       //  }
@@ -1332,8 +1362,16 @@ export default {
     leave (str) {
       this.$refs[str].swiper.autoplay.start()
     }
+    // getBaiduToken () {
+    //   const str = '?grant_type=client_credentials&client_id=ItVXnFiBfOYmL7GWYpXcXRL6&client_secret=5Mx4AC2YiHro5Zn1dMpXdo72IRFhEPCL'
+    //   this.$api.post('/oauth/2.0/token' + str).then(res => {
+    //     console.log(res, 'token')
+    //     this.baidu_token = res.access_token
+    //   })
+    // }
   },
   mounted () {
+    // this.getBaiduToken()
     // this.activeElem = this.huabuObj
     // this.chinaNetGongsiLogo = chinaNetGongsiLogo
     // this.waizijutouqiyeLogo = waizijutouqiyeLogo
@@ -1764,9 +1802,6 @@ export default {
     height: 100%;
   }
 }
-.createImg {
-  margin-top: 20px;
-}
 .nowelem {
   text-align: left;
 }
@@ -1831,5 +1866,13 @@ export default {
 .swiper-slide {
   height: 116.5px;
   background: #fff;
+}
+.btn-wrap{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  .el-button{
+    margin-right: 10px;
+  }
 }
 </style>
