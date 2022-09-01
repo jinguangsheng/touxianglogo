@@ -5,6 +5,7 @@ function resolve (dir) {
   return path.join(__dirname, '.', dir)
 }
 module.exports = {
+  publicPath: '.',
   devServer: {
     // host: 'localhost',
     // port: '8080', // 设置端口号
